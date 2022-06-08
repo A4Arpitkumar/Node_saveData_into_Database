@@ -14,10 +14,9 @@ app.use(bodyParser.urlencoded({
 
 app.get('/',function(req,res){
     res.render('Home')
-})
+});
 
-app.post('/getdata',function(req,res){
-    console.log(req.body);  
+
     
     // var name = req.body.f_name;
 
@@ -34,6 +33,10 @@ con.connect();
     
     console.log('Database is connected');
 
+    app.post('/getdata',function (req, res){
+        console.log(req.body);
+    
+
     var firstname = req.body.f_name;
     var middlename = req.body.m_name;
     var lastname = req.body.l_name;
@@ -49,10 +52,35 @@ con.connect();
     con.query(sql,function(err,result){
         if(err)throw err;
         console.log('record inserted');
-        res.redirect('/');
     })
-})
+    res.redirect('/');
+    //res.send('next page);
 
+})
+ app.get('/selectdata', function(req, res)
+ {
+     var selectdata = "select * from registration";
+     con.query(selectdata,function(error,results,fields){
+         if(error) throw error;
+         res.json({
+             data:results
+         })
+         
+         
+     });
+ })
+
+ app.get('/updatedata',function (req,res) {
+
+    var updatedata = "UPDATE registration SET firstname = 'Arpitkumar' where id='1'";
+
+    con.query(updatedata,function (error,results,field) {
+        if (error) throw error;
+        res.json({
+            data : results
+        })
+    })
+ })
 
 app.listen(2222);
 
